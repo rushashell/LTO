@@ -5,7 +5,7 @@ Topics:
 * [LTO node](lto-node-container-instance.md)
 * [LTO node with public facing API](lto-node-container-instance.md)
 
-# LTO node
+# LTO node with public facing API
 
 Welcome at this guide for setting up a LTO node within Azure. This is a quick-setup of a secure LTO node by using the Azure CLI and only executing a few commands!  
 
@@ -58,6 +58,9 @@ CONTAINER_WALLET_PASSWORD="PASSWORD"
 # Node logging level, available values: OFF, ERROR, WARN, INFO, DEBUG, TRACE.
 CONTAINER_LOG_LEVEL="INFO"
 
+# ApiKey used for the rest api authentication. 
+CONTAINER_REST_API_KEY="CREATE YOUR OWN API KEY"
+
 # The actual command:
 az container create --resource-group $CONTAINER_RESOURCE_GROUP --name $CONTAINER_NAME \
  --image legalthings/public-node \
@@ -65,13 +68,13 @@ az container create --resource-group $CONTAINER_RESOURCE_GROUP --name $CONTAINER
  --memory 2 \
  --os-type linux \
  --ip-address public \
- --ports 6868 \
+ --ports 6868 6869 \
  --restart-policy Always \
- --environment-variables "LTO_NODE_NAME"="$CONTAINER_NODE_NAME" "LTO_LOG_LEVEL"="$CONTAINER_LOG_LEVEL" "LTO_NETWORK"="$CONTAINER_NETWORK" \
- --secure-environment-variables "LTO_WALLET_SEED"="$CONTAINER_WALLET_SEED" "LTO_WALLET_PASSWORD"="$CONTAINER_WALLET_PASSWORD"
+ --environment-variables "LTO_NODE_NAME"="$CONTAINER_NODE_NAME" "LTO_ENABLE_REST_API"="TRUE" "LTO_LOG_LEVEL"="$CONTAINER_LOG_LEVEL" "LTO_NETWORK"="$CONTAINER_NETWORK" \
+ --secure-environment-variables "LTO_WALLET_SEED"="$CONTAINER_WALLET_SEED" "LTO_WALLET_PASSWORD"="$CONTAINER_WALLET_PASSWORD" "LTO_API_KEY"="$CONTAINER_REST_API_KEY"
 ```
 
-And that's it! You have a running LTO node! Of course there are ways to check if it is indeed running, so let's check that out! 
+And that's it! You have a running LTO node that also has an API public available. Of course there are ways to check if it is indeed running, so let's check that out! 
 
 ## Check status of our node
 We have a few ways to check the status of our (hopefully) running node. The easiest way is to check if the container is still running by using the following command:
