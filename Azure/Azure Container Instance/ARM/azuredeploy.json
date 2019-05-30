@@ -1,0 +1,212 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the container"
+      },
+      "defaultValue": "lto-network-node-aci"
+    },
+    "cpuCores": {
+      "type": "int",
+      "minValue": 1,
+      "maxValue": 4,
+      "metadata": {
+        "description": "The number of CPU cores to allocate to the container. Must be an integer."
+      },
+      "defaultValue": 1
+    },
+    "memoryInGb": {
+      "type": "string",
+      "metadata": {
+        "description": "The amount of memory to allocate to the container in gigabytes."
+      },
+      "allowedValues": [
+        "1.0",
+        "1.5",
+        "2.0",
+        "2.5",
+        "3.0",
+        "3.5",
+        "4.0",
+        "4.5",
+        "5.0",
+        "5.0",
+        "6.5",
+        "6.0",
+        "7.5",
+        "7.0",
+        "8.0",
+        "8.5",
+        "9.0",
+        "9.5",
+        "10.0",
+        "10.5",
+        "11.0",
+        "11.5",
+        "12.0",
+        "12.5",
+        "13.0",
+        "13.5",
+        "14.0"
+      ],
+      "defaultValue": "1.5"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Regional Location for the container."
+      }
+    },
+    "ltoNodeNetwork": {
+      "type": "string",
+      "metadata": {
+        "description": "The network on which the container should connect to."
+      },
+      "allowedValues": [
+        "MAINNET",
+        "TESTNET",
+        "CUSTOM"
+      ],
+      "defaultValue": "MAINNET"
+    },
+    "ltoNodeLogLevel": {
+      "type": "string",
+      "metadata": {
+        "description": "Node logging level."
+      },
+      "allowedValues": [
+        "OFF",
+        "ERROR",
+        "WARN",
+        "INFO",
+        "DEBUG",
+        "TRACE"
+      ],
+      "defaultValue": "INFO"
+    },
+    "ltoNodeName": {
+      "type": "string",
+      "metadata": {
+        "description": "Node name used in the handshake when connecting to other nodes"
+      },
+      "defaultValue": "MY AZURE NODE"
+    },
+    "ltoNodeApiEnabled": {
+      "type": "bool",
+      "metadata": {
+        "description": "Indication if the API within the container should be made available to the public"
+      },
+      "defaultValue": false
+    },
+    "ltoWalletSeed": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Plain text seed for node wallet. Container converts it to base58"
+      }
+    },
+    "ltoWalletPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for wallet file"
+      }
+    },
+    "ltoApiKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "ApiKey used for the rest api authentication"
+      }
+    }
+  },
+  "variables": {
+    "imageName": "legalthings/public-node",
+    "restartPolicy": "always",
+    "ltoPortsWithApi": [
+      {
+        "protocol": "TCP",
+        "port": 6868
+      },
+      {
+        "protocol": "TCP",
+        "port": 6869
+      }
+    ],
+    "ltoPortsWithoutApi": [
+      {
+        "protocol": "TCP",
+        "port": 6868
+      }
+    ],
+    "ltoNodePorts": "[if(parameters('ltoNodeApiEnabled'), variables('ltoPortsWithApi'), variables('ltoPortsWithoutApi'))]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('containerName')]",
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "containers": [
+          {
+            "name": "[parameters('containerName')]",
+            "properties": {
+              "image": "[variables('imageName')]",
+              "ports": "[variables('ltoNodePorts')]",
+              "environmentVariables": [
+                {
+                  "name": "LTO_NODE_NAME",
+                  "value": "[parameters('ltoNodeName')]"
+                },
+                {
+                  "name": "LTO_LOG_LEVEL",
+                  "value": "[parameters('ltoNodeLogLevel')]"
+                },
+                {
+                  "name": "LTO_NETWORK",
+                  "value": "[parameters('ltoNodeNetwork')]"
+                },
+                {
+                  "name": "LTO_ENABLE_REST_API",
+                  "value": "[parameters('ltoNodeApiEnabled')]"
+                },
+                {
+                  "name": "LTO_WALLET_SEED",
+                  "secureValue": "[parameters('ltoWalletSeed')]"
+                },
+                {
+                  "name": "LTO_WALLET_PASSWORD",
+                  "secureValue": "[parameters('ltoWalletPassword')]"
+                },
+                {
+                  "name": "LTO_API_KEY",
+                  "secureValue": "[parameters('ltoApiKey')]"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": "[parameters('cpuCores')]",
+                  "memoryInGb": "[parameters('memoryInGb')]"
+                }
+              }
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "[variables('restartPolicy')]",
+        "ipAddress": {
+          "type": "Public",
+          "ports": "[variables('ltoNodePorts')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "containerIPv4Address": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups/', parameters('containerName'))).ipAddress.ip]"
+    }
+  }
+}

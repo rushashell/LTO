@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerName": {
+            "value": "lto-network-node-aci"
+        },
+        "cpuCores": {
+            "value": 1
+        },
+        "memoryInGb": {
+            "value": "1.5"
+        },
+        "location": {
+            "value": "westeurope"
+        },
+        "ltoNodeNetwork": {
+            "value": "MAINNET"
+        },
+        "ltoNodeLogLevel": {
+            "value": "INFO"
+        },
+        "ltoNodeName": {
+            "value": "MY LTO NODE IN AZURE"
+        },
+        "ltoNodeApiEnabled": {
+            "value": false
+        }
+    }
+}
