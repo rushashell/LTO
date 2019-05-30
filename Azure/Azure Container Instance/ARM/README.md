@@ -9,10 +9,12 @@ The container we will be creating is called an Azure Container Instance. Azure w
 
 This templates deploys an LTO node into Azure Container Instances.
 
+You can deploy the node by just one click:
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Frushashell%2FLTO%2Fmaster%2FAzure%2FAzure%2520Container%2520Instance%2FARM%2Fazuredeploy.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/> 
+</a>
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Frushashell%2FLTO%2Fmaster%2FAzure%2FAzure%2520Container%2520Instance%2FARM%2Fazuredeploy.json" target="_blank">
+    <img src="http://armviz.io/visualizebutton.png"/> 
+</a>
+
 Happy staking!
-
-# By using Azure Portal
-
-
-
-https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fAzure%2fazure-quickstart-templates%2fmaster%2f101-aci-linuxcontainer-public-ip%2fazuredeploy.json

@@ -2,8 +2,8 @@
 
 Topics:
 * [General](readme.md)
-* [Using CLI](\CLI\readme.md)
-* [Using ARM Templates](\ARM\readme.md)
+* [Using CLI](https://github.com/rushashell/LTO/tree/master/Azure/Azure%20Container%20Instance/CLI)
+* [Using ARM Templates](https://github.com/rushashell/LTO/tree/master/Azure/Azure%20Container%20Instance/ARM)
 
 Welcome at this guide for setting up a LTO node within Azure. This is a quick-setup of a secure LTO node.
 
