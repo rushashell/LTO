@@ -7,9 +7,10 @@ Welcome at this guide for setting up a LTO node within Azure. This is a quick-se
 
 The container we will be creating is called an Azure Container Instance. Azure will take care of the fact it should be running always. We have the possibility to create an LTO with or without an API public accessible. 
 
-This templates deploys an LTO node into Azure Container Instances.
+This templates deploys a new LTO node into Azure Container Instances.
 
-You can deploy the node by just one click:
+You can deploy the node within your Azure tenant by just one click:
+
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Frushashell%2FLTO%2Fmaster%2FAzure%2FAzure%2520Container%2520Instance%2FARM%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/> 
 </a>
